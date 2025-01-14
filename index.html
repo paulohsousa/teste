@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Dinâmico - Soluções</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+        }
+        label, button {
+            margin-top: 10px;
+            display: block;
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Painel Dinâmico - Soluções</h1>
+
+    <!-- Soma -->
+    <section id="soma-section">
+        <h2>1. Resultado da Soma</h2>
+        <label for="soma-indice">Digite o valor de índice:</label>
+        <input type="number" id="soma-indice" value="13" />
+        <button onclick="calcularSoma()">Calcular Soma</button>
+        <p id="soma-resultado"></p>
+    </section>
+
+    <!-- Fibonacci -->
+    <section id="fibonacci-section">
+        <h2>2. Verificar Fibonacci</h2>
+        <label for="fibonacci-numero">Digite um número:</label>
+        <input type="number" id="fibonacci-numero" value="21" />
+        <button onclick="verificarFibonacci()">Verificar</button>
+        <p id="fibonacci-resultado"></p>
+    </section>
+
+    <!-- Faturamento Diário -->
+    <section id="faturamento-daily-section">
+        <h2>3. Faturamento Diário</h2>
+        <label for="faturamento-dados">Digite os valores de faturamento (separados por vírgulas):</label>
+        <input type="text" id="faturamento-dados" value="100,200,0,300,0,400" />
+        <button onclick="calcularFaturamento()">Calcular</button>
+        <p id="faturamento-daily-menor"></p>
+        <p id="faturamento-daily-maior"></p>
+        <p id="faturamento-daily-media"></p>
+    </section>
+
+    <!-- Percentual de Faturamento -->
+    <section id="faturamento-percentual-section">
+        <h2>4. Percentual de Faturamento</h2>
+        <button onclick="calcularPercentual()">Calcular Percentuais</button>
+        <ul id="faturamento-percentual-list"></ul>
+    </section>
+
+    <!-- Inverter String -->
+    <section id="inverter-string-section">
+        <h2>5. String Invertida</h2>
+        <label for="inverter-string">Digite uma string:</label>
+        <input type="text" id="inverter-string" value="Exemplo" />
+        <button onclick="inverterString()">Inverter</button>
+        <p id="inverter-string-resultado"></p>
+    </section>
+
+    <script>
+        // 1. Calcular Soma
+        function calcularSoma() {
+            const indice = parseInt(document.getElementById('soma-indice').value);
+            let soma = 0, k = 0;
+            while (k < indice) {
+                k++;
+                soma += k;
+            }
+            document.getElementById('soma-resultado').textContent = `O valor final da soma é: ${soma}`;
+        }
+
+        // 2. Verificar Fibonacci
+        function verificarFibonacci() {
+            const num = parseInt(document.getElementById('fibonacci-numero').value);
+            let a = 0, b = 1, pertence = false;
+            while (a <= num) {
+                if (a === num) {
+                    pertence = true;
+                    break;
+                }
+                [a, b] = [b, a + b];
+            }
+            const mensagem = pertence
+                ? `${num} pertence à sequência de Fibonacci.`
+                : `${num} não pertence à sequência de Fibonacci.`;
+            document.getElementById('fibonacci-resultado').textContent = mensagem;
+        }
+
+        // 3. Faturamento Diário
+        function calcularFaturamento() {
+            const valores = document.getElementById('faturamento-dados').value
+                .split(',')
+                .map(v => parseFloat(v))
+                .filter(v => !isNaN(v) && v > 0);
+            if (valores.length === 0) return alert('Digite valores válidos!');
+            const menor = Math.min(...valores);
+            const maior = Math.max(...valores);
+            const media = valores.reduce((acc, valor) => acc + valor, 0) / valores.length;
+            const diasAcimaDaMedia = valores.filter(v => v > media).length;
+            document.getElementById('faturamento-daily-menor').textContent = `Menor valor: ${menor}`;
+            document.getElementById('faturamento-daily-maior').textContent = `Maior valor: ${maior}`;
+            document.getElementById('faturamento-daily-media').textContent = `Dias acima da média: ${diasAcimaDaMedia}`;
+        }
+
+        // 4. Percentual de Faturamento
+        function calcularPercentual() {
+            const faturamentoEstados = {
+                SP: 67836.43,
+                RJ: 36678.66,
+                MG: 29229.88,
+                ES: 27165.48,
+                Outros: 19849.53
+            };
+            const total = Object.values(faturamentoEstados).reduce((acc, valor) => acc + valor, 0);
+            const lista = document.getElementById('faturamento-percentual-list');
+            lista.innerHTML = ''; // Limpa a lista anterior
+            for (const estado in faturamentoEstados) {
+                const percentual = ((faturamentoEstados[estado] / total) * 100).toFixed(2);
+                const li = document.createElement('li');
+                li.textContent = `${estado}: ${percentual}%`;
+                lista.appendChild(li);
+            }
+        }
+
+        // 5. Inverter String
+        function inverterString() {
+            const input = document.getElementById('inverter-string').value;
+            const resultado = input.split('').reverse().join('');
+            document.getElementById('inverter-string-resultado').textContent = `String invertida: ${resultado}`;
+        }
+    </script>
+</body>
+</html>
